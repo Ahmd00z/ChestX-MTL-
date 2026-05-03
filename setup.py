@@ -9,8 +9,8 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 setup(
     name="chestx-mtl",
     version="2.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Ahmed maged motea yousif",
+    author_email="ahmedmaged2004zsc@gmail.com.com",
     description="Advanced Multi-Task Learning for Chest X-Ray Analysis",
     long_description=long_description,
     long_description_content_type="text/markdown",
