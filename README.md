@@ -488,13 +488,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📬 Contact
 
-For questions or collaborations, please open an issue or contact:
+For questions or collaborations, please open an issue or contact:  
 
-- 📧 Email: your.email@example.com
-- 🐦 Twitter: [@yourhandle](https://twitter.com/yourhandle)
-- 💼 LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
-
----
+- 👤 Name: Ahmed Maged  
+- 📧 Email: ahmedmaged2004zsc@gmail.com  
+- 💼 LinkedIn: https://www.linkedin.com/in/ahmed-maged-swe/  
+- 📱 Phone: 01026381342  
+- 💻 GitHub Repository: https://github.com/Ahmd00z/ChestX-MTL-  
 
 <div align="center">
 
