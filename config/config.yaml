@@ -1,0 +1,135 @@
+# ChestX-MTL Configuration
+
+project:
+  name: "ChestX-MTL"
+  version: "2.0.0"
+  seed: 42
+
+# Data Configuration
+data:
+  image_size: 512
+  batch_size: 8
+  num_workers: 4
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+  # Augmentation
+  augmentation:
+    horizontal_flip: true
+    vertical_flip: false
+    rotation_limit: 15
+    brightness_limit: 0.2
+    contrast_limit: 0.2
+    gaussian_noise: 0.01
+    elastic_transform: false
+
+  # Normalization (ImageNet stats for EfficientNet)
+  normalize:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+
+# Model Configuration
+model:
+  encoder:
+    name: "efficientnet_b4"
+    pretrained: true
+    dropout: 0.3
+
+  classifier:
+    num_classes: 14
+    hidden_dim: 512
+    dropout: 0.5
+    use_attention: true
+
+  detector:
+    num_classes: 1  # Including background
+    num_anchors: 9
+    feature_channels: 256
+    use_fpn: true
+
+  segmenter:
+    decoder: "unetplusplus"
+    encoder_depth: 5
+    classes: 1
+    activation: "sigmoid"
+    use_attention: true
+
+  # Multi-Task Learning
+  mtl:
+    use_uncertainty_weighting: true
+    task_weights:
+      classification: 1.0
+      detection: 1.0
+      segmentation: 1.0
+
+# Training Configuration
+training:
+  epochs: 100
+  lr: 1.0e-4
+  weight_decay: 1.0e-5
+  optimizer: "adamw"
+  scheduler: "cosine"
+  warmup_epochs: 5
+  gradient_clip: 1.0
+  mixed_precision: true
+  accumulate_grad_batches: 2
+
+  # Early Stopping
+  early_stopping:
+    patience: 15
+    monitor: "val_total_loss"
+    mode: "min"
+
+  # Checkpointing
+  checkpoint:
+    save_top_k: 3
+    monitor: "val_total_loss"
+    mode: "min"
+    filename: "chestx-mtl-{epoch:02d}-{val_total_loss:.4f}"
+
+# Loss Weights
+losses:
+  classification:
+    name: "focal_loss"
+    gamma: 2.0
+    alpha: 0.25
+
+  detection:
+    name: "combined"
+    cls_weight: 1.0
+    box_weight: 1.5
+
+  segmentation:
+    name: "dice_bce"
+    dice_weight: 0.5
+    bce_weight: 0.5
+
+# Evaluation
+evaluation:
+  classification:
+    metrics: ["accuracy", "auc", "f1", "precision", "recall"]
+    threshold: 0.5
+
+  detection:
+    metrics: ["map", "map50", "map75"]
+    iou_threshold: 0.5
+
+  segmentation:
+    metrics: ["dice", "iou", "hd95"]
+    threshold: 0.5
+
+# Deployment
+deployment:
+  api:
+    host: "0.0.0.0"
+    port: 8000
+    workers: 1
+
+  frontend:
+    host: "0.0.0.0"
+    port: 7860
+    share: false
+
+  model_path: "weights/best_model.pth"
+  device: "auto"  # auto, cuda, cpu
